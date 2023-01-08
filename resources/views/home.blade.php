@@ -5,7 +5,7 @@
     <section id="hero-section" class="section top-section">
         <div class="container">
             <div class="flex-row">
-                <div class="hero--content col-2">
+                <div class="hero--content col-2" data-aos="fade-right">
                     <h1>Showcase your professional experience with an <span class="highlight">expertly</span> <span class="highlight">written resume</span></h1>
                     <p>Showcase your professional experience with an expertly written resume</p>
                     <div class="hero--content-btn_wraper">
@@ -25,7 +25,7 @@
                 <div class="options-heading col-5">
                     <h3>Are You <span class="highlight-2">Looking</span> For?</h3>
                 </div>
-                <div class="options-box col-5">
+                <div class="options-box col-5" data-aos="fade-down">
                     <div class="options--icon">
                         <img src="/images/cv-write.png" alt="Resume & CV Writing">
                     </div>
@@ -33,7 +33,7 @@
                         <h4>Resume & CV Writing</h4>
                     </div>
                 </div>
-                <div class="options-box col-5">
+                <div class="options-box col-5" data-aos="fade-down">
                     <div class="options--icon">
                         <img src="images/cover-letter.png" alt="Cover Letter">
                     </div>
@@ -41,7 +41,7 @@
                         <h4>Cover Letter</h4>
                     </div>
                 </div>
-                <div class="options-box col-5">
+                <div class="options-box col-5" data-aos="fade-down">
                     <div class="options--icon">
                         <img src="images/cv-edit.png" alt="Resume & CV Editing">
                     </div>
@@ -49,7 +49,7 @@
                         <h4>Resume & CV Editing</h4>
                     </div>
                 </div>
-                <div class="options-box col-5">
+                <div class="options-box col-5" data-aos="fade-down">
                     <div class="options--icon">
                         <img src="images/linked-write.png" alt="Linkedin Resume Writing">
                     </div>
@@ -84,7 +84,7 @@
                     </ul>
                 </div>
                 <div class="calculate-section--calculator col-40">
-                    <div class="calculate-section--calculator-wrapper">
+                    <div class="calculate-section--calculator-wrapper" data-aos="flip-up">
                         <h3>Calculate the price</h3>
                         <form>
                             <div class="calculator--field">

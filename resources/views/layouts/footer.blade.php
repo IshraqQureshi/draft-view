@@ -81,23 +81,23 @@
                 </div>
                 <div class="footer-col-menu">
                     <ul>
-                        <li>
-                            <a href="#">About</a>
+                        <li class="{{ $activeLink == 'about' ? 'active' : '' }}">
+                            <a href="{{ route('about') }}">About</a>
                         </li>
-                        <li>
-                            <a href="#">Faq</a>
+                        <li class="{{ $activeLink == 'faq' ? 'active' : '' }}">
+                            <a href="{{ route('faq') }}">Faq</a>
                         </li>
-                        <li>
-                            <a href="#">Contacts</a>
+                        <li class="{{ $activeLink == 'contact' ? 'active' : '' }}">
+                            <a href="{{ route('contact') }}">Contacts</a>
                         </li>
-                        <li>
-                            <a href="#">Privacy Policy</a>
+                        <li class="{{ $activeLink == 'privacy-policy' ? 'active' : '' }}">
+                            <a href="{{ route('privacy-policy') }}">Privacy Policy</a>
                         </li>
-                        <li>
-                            <a href="#">Terms & Conditions</a>
+                        <li class="{{ $activeLink == 'terms-conditions' ? 'active' : '' }}">
+                            <a href="{{ route('terms-conditions') }}">Terms & Conditions</a>
                         </li>
-                        <li>
-                            <a href="#">Refund Policy</a>
+                        <li class="{{ $activeLink == 'refund-policy' ? 'active' : '' }}">
+                            <a href="{{ route('refund-policy') }}">Refund Policy</a>
                         </li>
                     </ul>
                 </div>
@@ -105,3 +105,31 @@
         </div>
     </div>
 </footer>
+<div class="mobileMenuOverlay"></div>
+<div class="mobileMenu">
+    <nav>
+        <ul>
+            <li class="{{ $activeLink == 'home' ? 'active' : '' }}">
+                <a href="{{ route('home') }}">Home</a>
+            </li>
+            <li class="{{ $activeLink == 'our-process' ? 'active' : '' }}">
+                <a href="{{ route('our-process') }}">Our Process</a>
+            </li>
+            <li class="{{ $activeLink == 'services' ? 'active' : '' }}">
+                <a href="{{ route('services') }}">Services</a>
+            </li>
+            <li class="{{ $activeLink == 'pricing' ? 'active' : '' }}">
+                <a href="{{ route('pricing') }}">Pricing</a>
+            </li>
+            <li class="{{ $activeLink == 'about' ? 'active' : '' }}">
+                <a href="{{ route('about') }}">About</a>
+            </li>
+            <li class="{{ $activeLink == 'reviews' ? 'active' : '' }}">
+                <a href="{{ route('reviews') }}">Reviews</a>
+            </li>
+            <li class="{{ $activeLink == 'contact' ? 'active' : '' }}">
+                <a href="{{ route('contact') }}">Contact</a>
+            </li>
+        </ul>
+    </nav>
+</div>

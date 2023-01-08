@@ -1,9 +1,17 @@
 $(function(){
 
+
+    AOS.init();
+
+    // AOS.init({
+    //     delay: 1000,
+    //     duration: 8000
+    // });
+
     const topSpace = () => {
         const headerHeight = jQuery('#header').outerHeight();
         jQuery('.top-section').css({'padding-top': `${headerHeight + 50}px`});
-        jQuery('#page--header').css({'margin-top': `${headerHeight}px`});
+        jQuery('#page--header').css({'margin-top': `${headerHeight + 50}px`});
     }
 
     const fixedHeader = () => {
@@ -14,7 +22,10 @@ $(function(){
 
     }
 
-    topSpace();
+    setTimeout(() => {
+        topSpace();
+
+    }, 0)
     
     fixedHeader();
     jQuery(window).scroll(fixedHeader);
@@ -75,10 +86,12 @@ $(function(){
     })
 
 
-    processSlider[0].slick.slickGoTo(1);
-    setTimeout(()=>{
-        processSlider[0].slick.slickGoTo(0);
-    }, 500)
+    if(jQuery('.process--slider-wrapper').length > 0){
+        processSlider[0].slick.slickGoTo(1);
+        setTimeout(()=>{
+            processSlider[0].slick.slickGoTo(0);
+        }, 500)
+    }
     
 
     const packageSelector = () => {
@@ -122,8 +135,27 @@ $(function(){
     })
 
     jQuery('.testimonial--slider').slick({
-    slidesToShow: 3,
-    centerMode: true
+        slidesToShow: 3,
+        centerMode: true,
+        responsive: [
+            {
+                breakpoint: 981,
+                settings: {
+                    slidesToShow: 2,
+                    arrows: false
+                }
+            },
+            {
+                breakpoint: 667,
+                settings: {
+                    slidesToShow: 1,
+                    arrows: false,
+                    adaptiveHeight: true,
+                    autoplay: true,
+                    autoplaySpeed: 8000
+                }
+            }
+        ]
     })
 
     jQuery('.faq--box-header').click(function(){
@@ -136,5 +168,173 @@ $(function(){
             currentAccordion.next('.faq--box-body').slideDown();
         }
     })
+
+    jQuery('.review--play').click(function(){
+        const popupOverlay = document.createElement('div');
+        const popupWrapper = document.createElement('div');
+        const popupVideo = document.createElement('iframe');
+
+        const popupCloseBtn = document.createElement('span');
+
+        popupCloseBtn.setAttribute('class', 'review--popup-close');
+
+        const videoURL = jQuery(this).data('video-url');
+
+        popupOverlay.setAttribute('class', 'review--popup-overlay');
+        popupWrapper.setAttribute('class', 'review--popup');
+        popupVideo.setAttribute('src', videoURL);
+
+        popupWrapper.append(popupCloseBtn);
+        popupWrapper.append(popupVideo);
+
+        document.body.append(popupOverlay);
+        document.body.append(popupWrapper);
+
+        setTimeout(() => {
+            jQuery('.review--popup-overlay').addClass('show');
+            jQuery('.review--popup').addClass('show');
+
+            jQuery('.review--popup-overlay').click(function(){
+                jQuery('.review--popup-overlay').removeClass('show');
+                jQuery('.review--popup').removeClass('show');    
+            
+                setTimeout(() => {
+                    jQuery('.review--popup-overlay').remove();
+                    jQuery('.review--popup').remove();
+                }, 200)
+            });
+
+            
+
+
+        }, 200);
+
+
+    })
+
+
+
+    jQuery('.selectPackage--box').click(function(){
+        const currentPackage = jQuery(this).data('package-name');
+        const currentPackagePrice = jQuery(this).data('package-price');
+
+        if( !(jQuery(this).hasClass('active')) ){
+            jQuery('.selectPackage--box').removeClass('active')
+            jQuery(this).addClass('active');
+
+            jQuery('.payment--amount span').text(`${currentPackagePrice}`);
+
+        }    
+    });
+
+    jQuery('.payment--mode button').click(function(){
+        const currentPaymentMode = jQuery(this).data('payment-mode');
+
+        if( !(jQuery(this).hasClass('active')) ){
+            jQuery('.payment--mode button').removeClass('active');
+            jQuery(this).addClass('active');
+
+            jQuery('.payment--mode-tab').removeClass('active');
+            jQuery('.payment--mode-tab').each(function(){
+                const paymentModeTab = jQuery(this).data('payment-mode');
+                if(paymentModeTab == currentPaymentMode){
+                    jQuery(this).addClass('active');
+                }
+            })
+        }
+
+    })
+
+
+
+    if(jQuery('.stripe-pay').length > 0){
+     
+        jQuery('.stripe-pay').bind('submit', async function(e) {     
+            
+            if(jQuery('input[name="stripeToken"]').length == 0){
+                e.preventDefault();
+                const STRIPE_KEY = jQuery(this).data('stripe-publishable-key');
+    
+                jQuery('.form--submit-row input').attr('disabled', 'disabled');
+                jQuery('.ajax--loader').show();
+    
+    
+                Stripe.setPublishableKey(STRIPE_KEY);
+                await Stripe.createToken({
+                    number: jQuery('input[name=card_number]').val(),
+                    cvc: jQuery('input[name=cvv]').val(),
+                    exp_month: 12,
+                    exp_year: 23 
+                }, stripeResponseHandler);
+            } 
+        
+        });
+          
+        /*------------------------------------------
+        --------------------------------------------
+        Stripe Response Handler
+        --------------------------------------------
+        --------------------------------------------*/
+        function stripeResponseHandler(status, response) {
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+                
+            if(response.error){
+                jQuery('.form--error-row').show();
+                jQuery('.form--error-row p').text(response.error.message);
+            } else {
+                const token =  response['id'];
+
+                const data = {
+                    stripeToken: token,
+                    amount: jQuery('.selectPackage--box.active').data('package-price'),
+                    description: jQuery('.selectPackage--box.active').data('package-name')
+                }
+
+                $.ajax({
+                    url: jQuery('.stripe-pay').attr('action'),
+                    type: "POST",
+                    data: data,
+                    dataType: "json",
+                    success: function(response){
+                        jQuery('.form--error-row').hide();
+                        jQuery('.form--submit-row input').removeAttr('disabled');
+                        jQuery('.ajax--loader').hide();
+                
+                        if(response.status){
+                            window.location = response.thankyou
+                        }
+                    }
+                  });
+
+                  
+    
+            }
+            console.log(response);
+            
+
+        }
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 })
